@@ -22,7 +22,6 @@ This Streamlit application leverages Optical Character Recognition (OCR) technol
 - Text extraction using Tesseract OCR
 - Display of extracted text within the app
 - Downloadable extracted text as a .txt file
-- Error rate calculation (CER and WER) for OCR accuracy assessment
 
 ## Technologies Used
 
