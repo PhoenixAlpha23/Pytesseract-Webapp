@@ -1,4 +1,4 @@
-# OCR Text Extraction App
+# OCR Text Extraction App Using Streamlit
 
 ## Table of Contents
 1. [Introduction](#introduction)
