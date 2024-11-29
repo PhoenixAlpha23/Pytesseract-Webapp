@@ -118,11 +118,11 @@ def main():
     st.write("""Upload multiple images or PDF files to extract text. 
     Tesseract Page Segmentation Modes (PSM) control how Tesseract analyzes and interprets document layouts:
 
-PSM 3: Automatic page segmentation with orientation and script detection
-PSM 4: Assumes single column of text
-PSM 6: Assumes single uniform block of text
-PSM 11: Treats each line as a single text line
-PSM 12: Considers each word as a separate entity
+PSM 3: Automatic page segmentation with orientation and script detection.\n
+PSM 4: Assumes single column of text.\n
+PSM 6: Assumes single uniform block of text.\n
+PSM 11: Treats each line as a single text line.\n
+PSM 12: Considers each word as a separate entity.\n
 
 Choose based on your document's structure:
 
