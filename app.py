@@ -189,7 +189,7 @@ def main():
     st.markdown('## Upload multiple images or PDF files to extract text from.')
     st.write('From the list of Tesseract Page Segmentation Modes (PSM)  on the left,\n you control how Tesseract analyzes and interprets document with varying layouts:')
     st.write(""" Automatic detection works fine for most documents,\n
-    You can Choose a different one based on your document's structure from the list.\n""")
+    You can  also Choose a different one based on your document's structure from the list.\n""")
     
     # File uploader
     uploaded_files = st.file_uploader(
