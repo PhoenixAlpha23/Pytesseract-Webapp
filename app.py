@@ -26,25 +26,40 @@ def initialize_session_state():
         st.session_state.individual_texts = {}
 
 def create_sidebar_options():
-    """Create sidebar options for OCR processing."""
-    st.sidebar.header("OCR enhancement options Options")
-        psm_modes = {
-        3: "Automatic Page Segmentation",
-        4: "Single Column of Text",
-        6: "Single Block of Text",
-        11: "Single Text Line",
-        12: "Single Word"
-    }
+    """Create user-friendly OCR processing options."""
+    st.sidebar.header("Image Enhancement Options")
     return {
-        'apply_threshold': st.sidebar.checkbox("Apply Thresholding", value=True),
-        'apply_deskew': st.sidebar.checkbox("Apply Deskewing", value=True),
-        'apply_denoise': st.sidebar.checkbox("Apply Denoising", value=True),
-        'apply_contrast': st.sidebar.checkbox("Apply Contrast Enhancement", value=False),
+        'apply_threshold': st.sidebar.checkbox(
+            "Sharpen Text", 
+            value=True,
+            help="Improves text clarity by increasing contrast between text and background. Helps with faded or low-quality scans."
+        ),
+        'apply_deskew': st.sidebar.checkbox(
+            "Straighten Document", 
+            value=True,
+            help="Corrects tilted or skewed documents. Fixes images where text is not perfectly horizontal, making text easier to read."
+        ),
+        'apply_denoise': st.sidebar.checkbox(
+            "Remove Background Noise", 
+            value=True,
+            help="Removes specks, graininess, and background interference. Makes text clearer in scanned documents with imperfect backgrounds."
+        ),
+        'apply_contrast': st.sidebar.checkbox(
+            "Enhance Text Visibility", 
+            value=False,
+            help="Boosts text brightness and contrast. Useful for documents with poor lighting or faded print."
+        ),
         'psm': st.sidebar.selectbox(
-            "Page Segmentation Mode",
-            options=list(psm_modes.keys()),
-            format_func=lambda x: psm_modes[x],
-            help="Select how Tesseract should analyze the document layout"
+            "Text Layout Detection",
+            options=[3, 4, 6, 11, 12],
+            format_func=lambda x: {
+                3: "Automatic Detection",
+                4: "Single Column Layout",
+                6: "Single Text Block",
+                11: "Line by Line",
+                12: "Word by Word"
+            }[x],
+            help="Choose how the system should read your document's layout. Automatic[3] is best for most documents."
         )
     }
 
