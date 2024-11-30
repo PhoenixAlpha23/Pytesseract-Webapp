@@ -3,7 +3,7 @@ import io
 import zipfile
 import numpy as np
 from PIL import Image
-
+import opencv as cv2
 from utils.image_processing import preprocess_image
 from utils.pdf_processing import process_pdf
 from utils.text_extraction import extract_text
