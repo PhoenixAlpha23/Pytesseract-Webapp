@@ -63,9 +63,32 @@ def create_sidebar_options():
         )
     }
 
+def display_processed_image(original_image, processed_image):
+    """
+    Display original and processed images side by side
+    
+    Args:
+        original_image (numpy.ndarray): Original input image
+        processed_image (numpy.ndarray): Preprocessed image
+    """
+    # Create two columns for display
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("Original Image")
+        # Convert OpenCV image (BGR) to RGB for correct color display
+        st.image(cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB), 
+                 use_column_width=True)
+    
+    with col2:
+        st.subheader("Processed Image")
+        st.image(cv2.cvtColor(processed_image, cv2.COLOR_BGR2RGB), 
+                 use_column_width=True)
+
+
 def process_uploaded_files(uploaded_files, options):
     """
-    Process uploaded files and extract text.
+    Modified function to show processed images
     
     Args:
         uploaded_files (list): List of uploaded files
@@ -77,14 +100,36 @@ def process_uploaded_files(uploaded_files, options):
     all_text = []
     individual_texts = {}
     
-    for uploaded_file in uploaded_files:
+    # Progress bar for multiple file processing
+    progress_bar = st.progress(0)
+    
+    for i, uploaded_file in enumerate(uploaded_files):
         try:
+            # Update progress bar
+            progress_bar.progress((i + 1) / len(uploaded_files))
+            
             if uploaded_file.type == "application/pdf":
+                # Handle PDF processing
                 text = process_pdf(uploaded_file, options)
+                st.warning("PDF preview not supported. Text extracted.")
             else:
+                # Image processing
                 image = Image.open(uploaded_file)
                 image_np = np.array(image)
+                
+                # Show original image before processing
+                st.subheader(f"Processing: {uploaded_file.name}")
+                
+                # Display original image
+                st.image(image, caption="Original Image", use_column_width=True)
+                
+                # Preprocess image
                 processed_image = preprocess_image(image_np, options)
+                
+                # Display original and processed images side by side
+                display_processed_image(image_np, processed_image)
+                
+                # Extract text
                 text = extract_text(processed_image, options)
             
             all_text.append(f"File: {uploaded_file.name}\n\n{text}\n\n{'='*50}\n")
@@ -92,6 +137,9 @@ def process_uploaded_files(uploaded_files, options):
         
         except Exception as e:
             st.error(f"Error processing {uploaded_file.name}: {str(e)}")
+    
+    # Clear progress bar
+    progress_bar.empty()
     
     return all_text, individual_texts
 
