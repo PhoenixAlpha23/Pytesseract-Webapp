@@ -185,10 +185,10 @@ def main():
     initialize_session_state()
     
     # App title and description
-    st.title("OCR Text Extraction from Images and PDFs using Tesseract OCR")
-    st.write("""Upload multiple images or PDF files to extract text. 
-    Tesseract Page Segmentation Modes (PSM) control how Tesseract analyzes and interprets document layouts:
-
+    st.title("Text Extraction from Images and PDFs using Tesseract OCR")
+    st.markdown('## You can upload multiple images or PDF files to extract text from.')
+    st.write('Tesseract Page Segmentation Modes (PSM) control how Tesseract analyzes and interprets document layouts:')
+st.write("""
 PSM 3: Automatic page segmentation with orientation and script detection.\n
 PSM 4: Assumes single column of text.\n
 PSM 6: Assumes single uniform block of text.\n
