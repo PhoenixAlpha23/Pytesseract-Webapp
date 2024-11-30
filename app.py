@@ -2,7 +2,7 @@ import streamlit as st
 import io
 import zipfile
 import numpy as np
-import opencv as cv2
+import cv2
 from PIL import Image
 
 from utils.image_processing import preprocess_image
