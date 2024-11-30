@@ -27,7 +27,14 @@ def initialize_session_state():
 
 def create_sidebar_options():
     """Create sidebar options for OCR processing."""
-    st.sidebar.header("OCR Options")
+    st.sidebar.header("OCR enhancement options Options")
+        psm_modes = {
+        3: "Automatic Page Segmentation",
+        4: "Single Column of Text",
+        6: "Single Block of Text",
+        11: "Single Text Line",
+        12: "Single Word"
+    }
     return {
         'apply_threshold': st.sidebar.checkbox("Apply Thresholding", value=True),
         'apply_deskew': st.sidebar.checkbox("Apply Deskewing", value=True),
@@ -35,9 +42,9 @@ def create_sidebar_options():
         'apply_contrast': st.sidebar.checkbox("Apply Contrast Enhancement", value=False),
         'psm': st.sidebar.selectbox(
             "Page Segmentation Mode",
-            options=[3, 4, 6, 11, 12],
-            format_func=lambda x: f"PSM {x}",
-            help="3: Full auto, 4: Single column, 6: Single block of text, 11: Single text line, 12: Single word"
+            options=list(psm_modes.keys()),
+            format_func=lambda x: psm_modes[x],
+            help="Select how Tesseract should analyze the document layout"
         )
     }
 
