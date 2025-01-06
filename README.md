@@ -2,7 +2,7 @@
 
 ## Overview
 
-A powerful Streamlit application that uses Optical Character Recognition (OCR) to extract text from images and PDF files. The app employs advanced image processing techniques to enhance OCR accuracy and provide a user-friendly text extraction experience.
+A powerful Streamlit application that uses Optical Character Recognition (OCR) to extract text from images and PDF files. The app employs custom image preprocessing techniques to enhance OCR accuracy and provide a user-friendly text extraction experience for multiple files.
 
 ## Key Features
 
@@ -26,7 +26,7 @@ A powerful Streamlit application that uses Optical Character Recognition (OCR) t
 
 ### Image Preprocessing
 - Deskewing
-- Binarization (Otsu's method)
+- Binarization 
 - Noise removal
 - Contrast enhancement
 - Page segmentation mode selection
@@ -40,8 +40,8 @@ A powerful Streamlit application that uses Optical Character Recognition (OCR) t
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/ocr-text-extraction-app.git
-   cd ocr-text-extraction-app
+   git clone https://github.com/PhoenixAlpha23/Pytesseract-Webapp/main
+   cd main
    ```
 
 2. Install dependencies:
@@ -49,7 +49,7 @@ A powerful Streamlit application that uses Optical Character Recognition (OCR) t
    pip install -r requirements.txt
    ```
 
-3. Install Tesseract OCR:
+3. Install Tesseract for OCR functionalities:
    - Ubuntu: `sudo apt-get install tesseract-ocr`
    - macOS: `brew install tesseract`
    - Windows: Download from [Tesseract GitHub](https://github.com/UB-Mannheim/tesseract/wiki)
@@ -73,12 +73,12 @@ A powerful Streamlit application that uses Optical Character Recognition (OCR) t
 
 Deploy using Streamlit Cloud:
 1. Push code to GitHub
-2. Connect Streamlit Cloud to your repository
+2. Connect Streamlit Cloud to the repository
 3. Configure build settings
 
 ## Contributing
 
-Contributions are welcome! Please submit pull requests to the main repository.
+Contributions are welcome! Please submit pull requests to this main repository.
 
 ## License
 
