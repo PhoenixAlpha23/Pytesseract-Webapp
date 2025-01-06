@@ -1,4 +1,4 @@
-# OCR Text Extraction Using Streamlit
+# Text Extraction Application 
 
 ## Overview
 
