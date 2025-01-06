@@ -79,12 +79,12 @@ def display_processed_image(original_image, processed_image):
         st.subheader("Original Image")
         # Convert OpenCV image (BGR) to RGB for correct color display
         st.image(cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB), 
-                 use_column_width=True)
+                 use_container_width=True)
     
     with col2:
         st.subheader("Processed Image")
         st.image(cv2.cvtColor(processed_image, cv2.COLOR_BGR2RGB), 
-                 use_column_width=True)
+                 use_container_width=True)
 
 
 def process_uploaded_files(uploaded_files, options):
@@ -122,7 +122,7 @@ def process_uploaded_files(uploaded_files, options):
                 st.subheader(f"Processing: {uploaded_file.name}")
                 
                 # Display original image
-                st.image(image, caption="Original Image", use_column_width=True)
+                st.image(image, caption="Original Image", use_container_width=True)
                 
                 # Preprocess image
                 processed_image = preprocess_image(image_np, options)
