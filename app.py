@@ -129,7 +129,7 @@ def process_uploaded_files(uploaded_files, options):
                 st.image(image, caption="Original Image", use_container_width=True)
                               
                 # Extract text
-                text = extract_text(processed_image, options)
+                text = extract_text(image, options)
             
             all_text.append(f"File: {uploaded_file.name}\nLanguage: {options['language']}\n\n{text}\n\n{'='*50}\n")
             individual_texts[uploaded_file.name] = text
