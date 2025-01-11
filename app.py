@@ -9,6 +9,8 @@ from utils.image_processing import preprocess_image
 from utils.pdf_processing import process_pdf
 from utils.text_extraction import extract_text
 
+from utils.text_extraction import get_supported_languages
+
 def setup_page_config():
     """Configure Streamlit page settings."""
     st.set_page_config(
@@ -187,6 +189,9 @@ def main():
     # App title and description
     st.title("Text Extraction using Tesseract OCR")
     st.markdown('## Upload multiple images or PDF files to extract text from.')
+    st.write('You can use documents in the following languages\n')
+    # Print available languages
+    print(get_supported_languages())
     st.write('From the list of Tesseract Page Segmentation Modes (PSM)  on the left,\n you control how Tesseract analyzes and interprets document with varying layouts:')
     st.write(""" Automatic detection works fine for most documents,\n
     You can  also Choose a different one based on your document's structure from the list.\n""")
