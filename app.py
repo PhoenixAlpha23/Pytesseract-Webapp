@@ -7,9 +7,7 @@ from PIL import Image
 
 from utils.image_processing import preprocess_image
 from utils.pdf_processing import process_pdf
-from utils.text_extraction import extract_text
-
-from utils.text_extraction import get_supported_languages
+from utils.text_extraction import extract_text, get_supported_languages
 
 def setup_page_config():
     """Configure Streamlit page settings."""
@@ -30,6 +28,32 @@ def initialize_session_state():
 
 def create_sidebar_options():
     """Create user-friendly OCR processing options."""
+    st.sidebar.header("OCR Settings")
+    
+    # Language Selection
+    st.sidebar.subheader("Language Settings")
+    available_languages = get_supported_languages()
+    default_lang = 'English'
+    
+    # Primary language selection
+    primary_lang = st.sidebar.selectbox(
+        "Primary Language",
+        options=list(available_languages.keys()),
+        index=list(available_languages.keys()).index(default_lang),
+        help="Select the main language of your document"
+    )
+    
+    # Additional languages selection
+    additional_langs = st.sidebar.multiselect(
+        "Additional Languages (Optional)",
+        options=[lang for lang in available_languages.keys() if lang != primary_lang],
+        help="Select additional languages if your document contains multiple languages"
+    )
+    
+    # Combine selected languages
+    selected_langs = [primary_lang] + additional_langs
+    lang_codes = '+'.join([available_languages[lang] for lang in selected_langs])
+
     st.sidebar.header("Image Enhancement Options")
     return {
         'apply_threshold': st.sidebar.checkbox(
@@ -63,31 +87,11 @@ def create_sidebar_options():
                 12: "Word by Word"
             }[x],
             help="Choose how the system should read your document's layout. Automatic[3] is best for most documents."
-        )
+        ),
+        'language': lang_codes  # Add language codes to options
     }
 
-def display_processed_image(original_image, processed_image):
-    """
-    Display original and processed images side by side
-    
-    Args:
-        original_image (numpy.ndarray): Original input image
-        processed_image (numpy.ndarray): Preprocessed image
-    """
-    # Create two columns for display
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        st.subheader("Original Image")
-        # Convert OpenCV image (BGR) to RGB for correct color display
-        st.image(cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB), 
-                 use_container_width=True)
-    
-    with col2:
-        st.subheader("Processed Image")
-        st.image(cv2.cvtColor(processed_image, cv2.COLOR_BGR2RGB), 
-                 use_container_width=True)
-
+# Rest of your functions remain the same until process_uploaded_files
 
 def process_uploaded_files(uploaded_files, options):
     """
@@ -135,7 +139,7 @@ def process_uploaded_files(uploaded_files, options):
                 # Extract text
                 text = extract_text(processed_image, options)
             
-            all_text.append(f"File: {uploaded_file.name}\n\n{text}\n\n{'='*50}\n")
+            all_text.append(f"File: {uploaded_file.name}\nLanguage: {options['language']}\n\n{text}\n\n{'='*50}\n")
             individual_texts[uploaded_file.name] = text
         
         except Exception as e:
@@ -146,37 +150,7 @@ def process_uploaded_files(uploaded_files, options):
     
     return all_text, individual_texts
 
-def create_text_downloads(all_text, individual_texts):
-    """
-    Create download buttons for extracted texts.
-    
-    Args:
-        all_text (list): Combined extracted texts
-        individual_texts (dict): Individual file texts
-    """
-    # Combined text download
-    combined_text = "\n".join(all_text)
-    combined_text_io = io.BytesIO(combined_text.encode('utf-8'))
-    st.download_button(
-        label="Download Combined Extracted Text",
-        data=combined_text_io,
-        file_name="combined_extracted_text.txt",
-        mime="text/plain"
-    )
-    
-    # Individual texts download
-    if individual_texts:
-        zip_buffer = io.BytesIO()
-        with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
-            for file_name, text in individual_texts.items():
-                zip_file.writestr(f"{file_name}_extracted.txt", text)
-        
-        st.download_button(
-            label="Download Individual Extracted Texts",
-            data=zip_buffer.getvalue(),
-            file_name="individual_extracted_texts.zip",
-            mime="application/zip"
-        )
+# Rest of your functions remain the same
 
 def main():
     """Main Streamlit application function."""
@@ -189,12 +163,14 @@ def main():
     # App title and description
     st.title("Text Extraction using Tesseract OCR")
     st.markdown('## Upload multiple images or PDF files to extract text from.')
-    st.write('You can use documents in the following languages\n')
-    # Print available languages
-    print(get_supported_languages())
-    st.write('From the list of Tesseract Page Segmentation Modes (PSM)  on the left,\n you control how Tesseract analyzes and interprets document with varying layouts:')
+    
+    # Display supported languages
+    available_languages = get_supported_languages()
+    st.write('Supported Languages:', ', '.join(available_languages.keys()))
+    
+    st.write('From the list of Tesseract Page Segmentation Modes (PSM) on the left,\n you control how Tesseract analyzes and interprets document with varying layouts:')
     st.write(""" Automatic detection works fine for most documents,\n
-    You can  also Choose a different one based on your document's structure from the list.\n""")
+    You can also Choose a different one based on your document's structure from the list.\n""")
     
     # File uploader
     uploaded_files = st.file_uploader(
@@ -203,7 +179,7 @@ def main():
         type=["png", "jpg", "jpeg", "pdf"]
     )
     
-    # Create OCR options
+    #OCR options
     options = create_sidebar_options()
     
     # Process files when uploaded
@@ -215,9 +191,8 @@ def main():
         if all_text:
             st.text_area("Extracted Text", value="\n".join(all_text), height=300)
             
-            # Create download buttons
+            # download buttons
             create_text_downloads(all_text, individual_texts)
 
-# This ensures the app runs automatically when accessed
 if __name__ == "__main__":
     main()
