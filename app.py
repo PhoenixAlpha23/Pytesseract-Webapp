@@ -121,26 +121,17 @@ def process_uploaded_files(uploaded_files, options):
     Returns:
         tuple: Lists of all text and individual texts
     """
+    print("Uploaded Files:",uploaded_files)
     all_text = []
     individual_texts = {}
-    # Image processing
-    image = Image.open(uploaded_file)
-    image_np = np.array(image)
-
-    # Show original image before processing
-    st.subheader(f"Processing: {uploaded_file.name}")
-
-    # Preprocess image
-    processed_image = preprocess_image(image_np, options)
-
-    # Display original and processed images side by side
-    display_processed_image(image_np, processed_image)
-
-    # Extract text
-    text = extract_text(processed_image, options)
+    
     # Progress bar for multiple file processing
     progress_bar = st.progress(0)
     
+    # Make sure uploaded_files is not None and is iterable
+    if not uploaded_files:
+        return all_text, individual_texts
+        
     for i, uploaded_file in enumerate(uploaded_files):
         try:
             # Update progress bar
@@ -158,19 +149,21 @@ def process_uploaded_files(uploaded_files, options):
                 # Show original image before processing
                 st.subheader(f"Processing: {uploaded_file.name}")
                 
-                # Display original image
-                st.image(image, caption="Original Image", use_container_width=True)
-                              
+                # Preprocess image
+                processed_image = preprocess_image(image_np, options)
+                
+                # Display original and processed images side by side
+                display_processed_image(image_np, processed_image)
+                
                 # Extract text
-                text = extract_text(image, options)
+                text = extract_text(processed_image, options)
             
-            all_text.append(f"File: {uploaded_file.name}\nLanguage: {options['language']}\n\n{text}\n\n{'='*50}\n")
+            all_text.append(f"File: {uploaded_file.name}\n\n{text}\n\n{'='*50}\n")
             individual_texts[uploaded_file.name] = text
         
         except Exception as e:
             st.error(f"Error processing {uploaded_file.name}: {str(e)}")
-            
-
+    
     # Clear progress bar
     progress_bar.empty()
     
