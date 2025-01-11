@@ -88,10 +88,8 @@ def create_sidebar_options():
             }[x],
             help="Choose how the system should read your document's layout. Automatic[3] is best for most documents."
         ),
-        'language': lang_codes  # Add language codes to options
+        'language': lang_codes  
     }
-
-# Rest of your functions remain the same until process_uploaded_files
 
 def process_uploaded_files(uploaded_files, options):
     """
@@ -129,13 +127,7 @@ def process_uploaded_files(uploaded_files, options):
                 
                 # Display original image
                 st.image(image, caption="Original Image", use_container_width=True)
-                
-                # Preprocess image
-                processed_image = preprocess_image(image_np, options)
-                
-                # Display original and processed images side by side
-                display_processed_image(image_np, processed_image)
-                
+                              
                 # Extract text
                 text = extract_text(processed_image, options)
             
@@ -144,13 +136,28 @@ def process_uploaded_files(uploaded_files, options):
         
         except Exception as e:
             st.error(f"Error processing {uploaded_file.name}: {str(e)}")
+
+    def display_results(all_text):
+    """Display the extracted text results"""
+    st.subheader("Extracted Text")
+
+    # Display tabs for each processed file
+    if st.session_state.processed_files:
+        tabs = st.tabs(list(st.session_state.processed_files.keys()))
+        for tab, (filename, file_info) in zip(tabs, st.session_state.processed_files.items()):
+            with tab:
+                st.text_area(
+                    "Extracted Content",
+                    value=fileinfo['text'],
+                    height=300,
+                    key=f"text{filename}"
+                )
+                st.info(f"File Type: {file_info['type']}\nFile Size: {file_info['size']} bytes")
     
     # Clear progress bar
     progress_bar.empty()
     
     return all_text, individual_texts
-
-# Rest of your functions remain the same
 
 def main():
     """Main Streamlit application function."""
