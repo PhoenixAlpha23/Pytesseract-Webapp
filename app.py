@@ -169,6 +169,38 @@ def process_uploaded_files(uploaded_files, options):
     
     return all_text, individual_texts
 
+def create_text_downloads(all_text, individual_texts):
+    """
+   download buttons for extracted text(s).
+    
+    Args:
+        all_text (list): Combined extracted texts
+        individual_texts (dict): Individual file texts
+    """
+    # Combined text download
+    combined_text = "\n".join(all_text)
+    combined_text_io = io.BytesIO(combined_text.encode('utf-8'))
+    st.download_button(
+        label="Download Combined Extracted Text",
+        data=combined_text_io,
+        file_name="combined_extracted_text.txt",
+        mime="text/plain"
+    )
+    
+    # Individual texts download
+    if individual_texts:
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(zip_buffer, "a", zipfile.ZIP_DEFLATED, False) as zip_file:
+            for file_name, text in individual_texts.items():
+                zip_file.writestr(f"{file_name}_extracted.txt", text)
+        
+        st.download_button(
+            label="Download Individual Extracted Texts",
+            data=zip_buffer.getvalue(),
+            file_name="individual_extracted_texts.zip",
+            mime="application/zip"
+        )
+
 def main():
     """Main Streamlit application function."""
     # Setup page configuration
