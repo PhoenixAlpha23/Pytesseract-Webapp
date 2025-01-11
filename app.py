@@ -138,21 +138,16 @@ def process_uploaded_files(uploaded_files, options):
             st.error(f"Error processing {uploaded_file.name}: {str(e)}")
 
     def display_results(all_text):
-    """Display the extracted text results"""
-    st.subheader("Extracted Text")
+        """Display the extracted text results"""
+        st.subheader("Extracted Text")
 
-    # Display tabs for each processed file
-    if st.session_state.processed_files:
-        tabs = st.tabs(list(st.session_state.processed_files.keys()))
-        for tab, (filename, file_info) in zip(tabs, st.session_state.processed_files.items()):
-            with tab:
-                st.text_area(
-                    "Extracted Content",
-                    value=fileinfo['text'],
-                    height=300,
-                    key=f"text{filename}"
-                )
-                st.info(f"File Type: {file_info['type']}\nFile Size: {file_info['size']} bytes")
+        # Display tabs for each processed file
+        if st.session_state.processed_files:
+            tabs = st.tabs(list(st.session_state.processed_files.keys()))
+            for tab, (filename, file_info) in zip(tabs, st.session_state.processed_files.items()):
+                with tab:
+                    st.text_area("Extracted Content",value=fileinfo['text'],height=300,key=f"text{filename}")
+                    st.info(f"File Type: {file_info['type']}\nFile Size: {file_info['size']} bytes")
     
     # Clear progress bar
     progress_bar.empty()
