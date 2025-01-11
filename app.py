@@ -90,6 +90,25 @@ def create_sidebar_options():
         ),
         'language': lang_codes  
     }
+def display_processed_image(original_image, processed_image):
+    """
+    Display original and processed images side by side
+    
+    Args:
+        original_image (numpy.ndarray): Original input image
+        processed_image (numpy.ndarray): Preprocessed image
+    """
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.subheader("Original Image")
+        st.image(cv2.cvtColor(original_image, cv2.COLOR_BGR2RGB), 
+                 use_container_width=True)
+    
+    with col2:
+        st.subheader("Processed Image")
+        st.image(cv2.cvtColor(processed_image, cv2.COLOR_BGR2RGB), 
+                 use_container_width=True)
 
 def process_uploaded_files(uploaded_files, options):
     """
@@ -104,7 +123,21 @@ def process_uploaded_files(uploaded_files, options):
     """
     all_text = []
     individual_texts = {}
-    
+    # Image processing
+    image = Image.open(uploaded_file)
+    image_np = np.array(image)
+
+    # Show original image before processing
+    st.subheader(f"Processing: {uploaded_file.name}")
+
+    # Preprocess image
+    processed_image = preprocess_image(image_np, options)
+
+    # Display original and processed images side by side
+    display_processed_image(image_np, processed_image)
+
+    # Extract text
+    text = extract_text(processed_image, options)
     # Progress bar for multiple file processing
     progress_bar = st.progress(0)
     
@@ -136,19 +169,8 @@ def process_uploaded_files(uploaded_files, options):
         
         except Exception as e:
             st.error(f"Error processing {uploaded_file.name}: {str(e)}")
+            
 
-    def display_results(all_text):
-        """Display the extracted text results"""
-        st.subheader("Extracted Text")
-
-        # Display tabs for each processed file
-        if st.session_state.processed_files:
-            tabs = st.tabs(list(st.session_state.processed_files.keys()))
-            for tab, (filename, file_info) in zip(tabs, st.session_state.processed_files.items()):
-                with tab:
-                    st.text_area("Extracted Content",value=fileinfo['text'],height=300,key=f"text{filename}")
-                    st.info(f"File Type: {file_info['type']}\nFile Size: {file_info['size']} bytes")
-    
     # Clear progress bar
     progress_bar.empty()
     
