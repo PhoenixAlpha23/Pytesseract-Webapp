@@ -7,7 +7,7 @@ from .text_extraction import extract_text
 def process_pdf(uploaded_file, options):
     """
     Processes an uploaded PDF file:
-    1. Reads the PDF
+    1. Read PDF
     2. Converts each page to an image
     3. Preprocesses each image
     4. Extracts text from each preprocessed image
