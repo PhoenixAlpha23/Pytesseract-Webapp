@@ -20,6 +20,9 @@ def get_supported_languages() -> Dict[str, str]:
     all_languages = {
         'English': 'eng',
         'Hindi': 'hin',
+        'Marathi':'mar',
+        'Gujrati':'guj',
+        'Punjabi':'pan'
     }
     
     installed_langs = get_installed_languages()
