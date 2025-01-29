@@ -1,3 +1,7 @@
 tesseract-ocr
 libtesseract-dev
-tesseract-ocr-all
+tesseract-ocr-hin
+tesseract-ocr-eng
+tesseract-ocr-mar
+tesseract-ocr-guj
+tesseract-ocr-pan
