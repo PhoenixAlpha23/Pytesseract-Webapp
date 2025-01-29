@@ -12,17 +12,18 @@ from utils.text_extraction import extract_text, get_supported_languages
 #Added for script detection functionality by using script.tessdata on streamlit cloud
 import os
 import urllib.request
+import pytesseract
+# Use `/tmp/tessdata` (writable directory)
+tessdata_dir = "/tmp/tessdata"
+os.makedirs(tessdata_dir, exist_ok=True)  # This should now work
 
-tessdata_dir = "/app/tessdata"  # Streamlit Cloud's writable directory
-os.makedirs(tessdata_dir, exist_ok=True)
-
-# Download traineddata file if it doesn't exist
+#To Download traineddata if not present
 traineddata_path = os.path.join(tessdata_dir, "script.traineddata")
 if not os.path.exists(traineddata_path):
     urllib.request.urlretrieve("URL_TO_SCRIPT.TRAINEDDATA", traineddata_path)
 
-# Set Tesseract to use this tessdata folder
-os.environ["TESSDATA_PREFIX"] = tessdata_dir
+# Set Tesseract environment variable
+os.environ["TESSDATA_PREFIX"] = "/tmp/"
 config = f"--tessdata-dir {tessdata_dir}"
 
 # Below remains the same
